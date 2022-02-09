@@ -1,0 +1,17 @@
+{
+  "name": "famcs_online_game_server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./comiled/index.js",
+  "scripts": {
+    "run": "tsc && node ./compiled/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^17.0.16",
+    "typescript": "^3.9.10"
+  }
+}

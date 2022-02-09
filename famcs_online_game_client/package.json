@@ -1,0 +1,24 @@
+{
+    "name": "famcs_online_game_client",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "build": "tsc && webpack",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "pixi.js": "^6.2.2",
+        "socket.io-client": "^4.4.1"
+    },
+    "devDependencies": {
+        "@types/node": "^17.0.16",
+        "@types/pixi.js": "^5.0.0",
+        "@types/socket.io-client": "^3.0.0",
+        "@types/web": "^0.0.52",
+        "webpack": "^5.68.0"
+    }
+}
