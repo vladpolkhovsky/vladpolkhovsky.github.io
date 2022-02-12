@@ -2,7 +2,8 @@
     "name": "TermWork server",
     "version": "1.0.0",
     "scripts": {
-        "start":"cd ./famcs_online_game_server && npm install && npm run build_and_run"
+        "start":"cd ./famcs_online_game_server && npm install",
+        "postinstall": "cd ./famcs_online_game_server && npm run build_and_run"
     },
     "dependencies": {
 
