@@ -1,10 +1,9 @@
 import {GameDescriptor} from "./GameDescriptor";
+import {PositionDescriptor} from "./PositionDescriptor";
 
-export interface TileDescriptor extends GameDescriptor {
+export interface TileDescriptor extends GameDescriptor, PositionDescriptor {
     objectType: "TileObject";
 
-    x: number,
-    y: number,
     len?: number,
     type: string,
     additionalType?: string,

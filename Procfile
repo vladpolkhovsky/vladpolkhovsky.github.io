@@ -1,0 +1,1 @@
+web: sh -c 'cd ./famcs_online_game_server/ && npm run build_and_run'
