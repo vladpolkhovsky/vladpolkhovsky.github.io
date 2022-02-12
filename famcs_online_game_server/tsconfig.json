@@ -1,14 +1,17 @@
 {
     "compilerOptions": {
         "lib": [
-            "ES2015"
+            "es5",
+            "es2015.promise",
+            "dom",
+            "es2015"
         ],
         "skipLibCheck": true,
-        "target": "ES2015",
+        "target": "ES5",
         "typeRoots": [
             "node_modules/@types"
         ],
-        "outDir": "./compiled/",
+        "outDir": "./compiled",
         "module": "CommonJS",
         "moduleResolution": "node",
         "emitDecoratorMetadata": true,

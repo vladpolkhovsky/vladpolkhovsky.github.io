@@ -1,27 +1,40 @@
 import {io, Socket} from "socket.io-client"
 import {Game} from "../Game";
-import {ServerToClientEvents} from "./ServerToClinetEvents";
-import {ClientToServerEvents} from "./ClientToServerEvents";
 
 export class ConnectionHandler {
 
-    private socket: Socket<ServerToClientEvents, ClientToServerEvents>;
+    private socket: Socket;
 
     private game: Game;
 
     public constructor(connectionUrl: string, game: Game) {
-        this.socket = io(connectionUrl);
+        this.socket = io(connectionUrl, {
+            transports: [
+                "websocket"
+            ]
+        });
+
         this.setup(game);
     }
 
     private setup(game: Game) {
         this.game = game;
 
-        this.socket.on("connect", () => {
-            this.socket.on("initialize", td => {
+        console.log("Client try to connect:");
 
-            })
-        })
+        this.socket.on("connect", () => {
+            console.log("client connected");
+
+            this.socket.on("initialize", td => {
+                console.log("initialize message:", td);
+                game.loadMap(td);
+            });
+
+            this.socket.on("clear", () => {
+                this.game.clearData();
+            });
+
+        });
 
     }
 
