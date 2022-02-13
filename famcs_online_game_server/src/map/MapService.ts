@@ -9,7 +9,7 @@ interface MapShort {
 
 export class MapService {
 
-    private static shortMapLocation: string = "./resources/map/map.short.js";
+    private static shortMapLocation: string = "./famcs_online_game_server/resources/map/map.short.js";
 
     private tiles:TileDescriptor[][];
 
