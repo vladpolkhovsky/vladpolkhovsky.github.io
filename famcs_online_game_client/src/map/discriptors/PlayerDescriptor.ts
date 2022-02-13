@@ -3,5 +3,6 @@ import {PositionDescriptor} from "./PositionDescriptor";
 
 export interface PlayerDescriptor extends GameDescriptor, PositionDescriptor {
     objectType: "player",
-    direction: number
+    direction: number,
+    id?: number
 }

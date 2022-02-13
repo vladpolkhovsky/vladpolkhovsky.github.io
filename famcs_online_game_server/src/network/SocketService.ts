@@ -12,12 +12,18 @@ export class SocketService {
 
     }
 
-    public register(socket: Socket) {
+    public getNextId():number {
         let cId = this.nextFreeId;
         this.nextFreeId++;
+        return cId;
+    }
+
+    public register(socket: Socket):number {
+        let cId = this.getNextId();
         console.log("register new socket with id: " + cId);
         this.idToSocket.set(cId, socket);
         this.socketToId.set(socket, cId);
+        return cId;
     }
 
     public unRegister(socket: Socket) {
@@ -27,8 +33,15 @@ export class SocketService {
         this.socketToId.delete(socket);
     }
 
+    public getAllPlayersIds(): number[] {
+        return Array.from(this.socketToId.values());
+    }
+
     public getId(socket: Socket): number {
         return this.socketToId.get(socket);
     }
 
+    public getSocket(id: number) {
+        return this.idToSocket.get(id);
+    }
 }

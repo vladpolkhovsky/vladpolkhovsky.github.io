@@ -9,18 +9,16 @@ export class ViewController {
     constructor(app: Application, container: Container) {
         this.mouseDown = false;
         this.container = container;
-        this.attachEvents(app.view);
+        this.attachEvents(document.body);
     }
 
-    private attachEvents(canvas: HTMLCanvasElement) {
+    private attachEvents(canvas: HTMLElement) {
 
         canvas.addEventListener("mousedown", ev => {
-            console.log(ev)
             this.mouseDown = true;
         });
 
         canvas.addEventListener("mouseup", ev => {
-            console.log(ev)
             this.mouseDown = false;
         });
 
@@ -30,7 +28,6 @@ export class ViewController {
                 let newY = ev.movementY + this.container.position.y;
                 this.container.x = newX;
                 this.container.y = newY;
-                console.log(this.mouseDown, ev.movementX, ev.movementY)
             }
         });
 
