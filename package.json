@@ -1,0 +1,10 @@
+{
+    "name": "TermWork",
+    "version": "1.0.0",
+    "scripts": {
+        "start": "npm --prefix ./famcs_online_game_server run build_and_run"
+    },
+    "dependencies": {
+
+    }
+}
