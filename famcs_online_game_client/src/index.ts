@@ -1,6 +1,9 @@
 import {Game} from "./core/Game";
 
 export function init() {
-    console.log(document.domain);
-    let game: Game = new Game(document.body, "localhost:5000");
+    let connection_url = 'localhost:5000';
+    if (document.domain === 'vladpolkhovsky.github.io') {
+        connection_url = 'https://famcs-game-server.herokuapp.com/';
+    }
+    let game: Game = new Game(document.body, connection_url);
 }

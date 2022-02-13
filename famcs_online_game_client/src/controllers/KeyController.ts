@@ -1,10 +1,7 @@
 export class KeyController {
 
-    Map
-
-    constructor(canvas:HTMLCanvasElement) {
+    public constructor(canvas: HTMLCanvasElement) {
 
     }
-
 
 }
