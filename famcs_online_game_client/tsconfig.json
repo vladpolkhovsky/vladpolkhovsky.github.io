@@ -1,27 +1,27 @@
 {
-    "compilerOptions": {
-        "lib": [
-            "es5",
-            "es2015.promise",
-            "dom",
-            "es2015"
-        ],
-        "skipLibCheck": true,
-        "target": "ES3",
-        "typeRoots": [
-            "node_modules/@types"
-        ],
-        "outDir": "./compiled",
-        "module": "CommonJS",
-        "moduleResolution": "node",
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "allowSyntheticDefaultImports": true,
-        "declaration": false,
-        "sourceMap": true
-    },
-    "compileOnSave": true,
-    "exclude": [
-        "./node_modules"
-    ]
+  "compilerOptions": {
+    "lib": [
+      "es5",
+      "es2015.promise",
+      "dom",
+      "es2015"
+    ],
+    "skipLibCheck": true,
+    "target": "ES3",
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+    "outDir": "./compiled",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "declaration": false,
+    "sourceMap": true
+  },
+  "compileOnSave": true,
+  "exclude": [
+    "./node_modules"
+  ]
 }

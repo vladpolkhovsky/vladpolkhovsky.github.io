@@ -3,14 +3,14 @@ import {ConnectionHandler} from "../core/network/ConnectionHandler";
 
 export class KeyController {
 
-    private connectionHandler:ConnectionHandler;
+    private connectionHandler: ConnectionHandler;
 
-    public constructor(app:Application, connectionHandler:ConnectionHandler) {
+    public constructor(app: Application, connectionHandler: ConnectionHandler) {
         this.connectionHandler = connectionHandler;
         this.attachEvents(app.view.parentElement);
     }
 
-    public static controlKeys:Array<String> = [ "w", "a", "s", "d" ];
+    public static controlKeys: Array<String> = ["w", "a", "s", "d"];
 
     private attachEvents(canvas: HTMLElement) {
 

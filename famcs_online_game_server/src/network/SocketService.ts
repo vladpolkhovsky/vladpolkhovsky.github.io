@@ -12,13 +12,13 @@ export class SocketService {
 
     }
 
-    public getNextId():number {
+    public getNextId(): number {
         let cId = this.nextFreeId;
         this.nextFreeId++;
         return cId;
     }
 
-    public register(socket: Socket):number {
+    public register(socket: Socket): number {
         let cId = this.getNextId();
         console.log("register new socket with id: " + cId);
         this.idToSocket.set(cId, socket);

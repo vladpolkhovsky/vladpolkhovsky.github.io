@@ -1,4 +1,4 @@
-interface KeyPressed {
+export interface KeyPressed {
     w: boolean,
     a: boolean,
     s: boolean,
@@ -35,4 +35,7 @@ export class KeyService {
         this.get(socketId)[key] = false;
     }
 
+    public processDisconnect(socketId: number): void {
+        this.idToKeys.delete(socketId);
+    }
 }

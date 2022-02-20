@@ -6,8 +6,9 @@ import {TileDescriptor} from "../map/discriptors/TileDescriptor";
 import {PlayerDescriptor} from "../map/discriptors/PlayerDescriptor";
 import {Player} from "../map/Player";
 import {KeyController} from "../controllers/KeyController";
-import { GameDescriptor } from "../map/discriptors/GameDescriptor";
+import {GameDescriptor} from "../map/discriptors/GameDescriptor";
 import {OtherObjectManager} from "./OtherObjectManager";
+import {ChunkDescriptor} from "../map/discriptors/ChunkDescriptor";
 
 export class Game {
 
@@ -40,7 +41,7 @@ export class Game {
         return this.app;
     }
 
-    public getPlayer():Player {
+    public getPlayer(): Player {
         return this.player;
     }
 
@@ -49,8 +50,8 @@ export class Game {
         this.level.clear();
     }
 
-    public loadMap(td: TileDescriptor[][], playerDescriptor:PlayerDescriptor) {
-        this.level = Level.builder().loadMapFromTileDescriptorArray(td);
+    public loadMap(chunks: ChunkDescriptor[], playerDescriptor: PlayerDescriptor) {
+        this.level = Level.builder().loadMapFromTileDescriptorArray(this.toTiles(chunks));
         this.player = Player.builder().load(playerDescriptor);
         this.level.attach(this.app.stage);
         this.player.attach(this.level.getContainer());
@@ -63,12 +64,27 @@ export class Game {
         pd.forEach(descriptor => {
             if (descriptor.objectType === "player") {
                 let pDescriptor = <PlayerDescriptor>descriptor;
-                if (pDescriptor.id == this.player.getDescriptor().id) {
+                if (pDescriptor.id === this.player.getDescriptor().id) {
                     this.player.applyDescriptor(pDescriptor);
                 } else {
+                    console.log("new player");
                     this.otherObjectManager.apply(pDescriptor);
                 }
             }
         })
+    }
+
+    private toTiles(chunks: ChunkDescriptor[]): TileDescriptor[][] {
+        let cTiles: TileDescriptor[][] = [[]];
+        chunks.forEach(chunk => {
+            chunk.td.forEach(tile => {
+                cTiles[0].push(tile);
+            });
+        });
+        return cTiles;
+    }
+
+    public processDisconnect(id: number):void {
+        this.otherObjectManager.remove(id);
     }
 }

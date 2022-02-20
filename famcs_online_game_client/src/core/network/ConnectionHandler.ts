@@ -33,7 +33,11 @@ export class ConnectionHandler {
 
             this.socket.on("initialize", (initMessage: InitMessage) => {
                 console.log("initialize message:", initMessage);
-                game.loadMap(initMessage.tiles, initMessage.player);
+                this.game.loadMap(initMessage.chunks, initMessage.player);
+            });
+
+            this.socket.on("disconnect_player", (id) => {
+                this.game.processDisconnect(id);
             });
 
             this.socket.on("update", (pd: GameDescriptor[]) => {

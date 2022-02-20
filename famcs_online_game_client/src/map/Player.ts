@@ -1,6 +1,5 @@
 import {PlayerDescriptor} from "./discriptors/PlayerDescriptor";
-import {Container, Loader} from "pixi.js";
-import {Sprite} from "pixi.js"
+import {Container, Sprite} from "pixi.js";
 
 export class Player {
 
@@ -12,12 +11,12 @@ export class Player {
         this.sprite.anchor.set(0.5);
     }
 
-    public load(pd:PlayerDescriptor) {
+    public load(pd: PlayerDescriptor) {
         this.descriptor = pd;
         return this;
     }
 
-    public applyDescriptor(pd:PlayerDescriptor) {
+    public applyDescriptor(pd: PlayerDescriptor) {
         this.descriptor = pd;
         this.sprite.position.set(pd.x, pd.y)
     }
@@ -26,7 +25,7 @@ export class Player {
         container.addChild(this.sprite);
     }
 
-    public static builder():Player {
+    public static builder(): Player {
         return new Player();
     }
 

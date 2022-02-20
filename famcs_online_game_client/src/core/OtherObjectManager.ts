@@ -20,9 +20,8 @@ export class OtherObjectManager {
     }
 
     public apply(pDescriptor: PlayerDescriptor) {
-        let otherPlayerObject:OtherPlayerObject = this.idToPlayerObject.get(pDescriptor.id);
+        let otherPlayerObject: OtherPlayerObject = this.idToPlayerObject.get(pDescriptor.id);
         if (otherPlayerObject === undefined) {
-            console.log(pDescriptor);
             let sprite: Sprite = Sprite.from("../resources/player.png");
             sprite.anchor.set(0.5);
             otherPlayerObject = {
@@ -39,5 +38,9 @@ export class OtherObjectManager {
 
     public attach(container: Container) {
         container.addChild(this.container);
+    }
+
+    public remove(id:number): void {
+        this.container.removeChild(this.idToPlayerObject.get(id).sprite);
     }
 }

@@ -1,5 +1,4 @@
 import {Game} from "./core/Game";
-import {Loader} from "pixi.js";
 
 export function init() {
     let connection_url = 'localhost:5000';
