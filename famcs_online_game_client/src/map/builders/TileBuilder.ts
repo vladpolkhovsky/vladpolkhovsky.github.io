@@ -15,15 +15,15 @@ export class TileBuilder {
         let type = TileType[descriptor.type];
         let color: number = undefined;
 
-        if (type == TileType.Road) {
+        if (type === TileType.Road) {
             color = 0x888888;
         }
 
-        if (type == TileType.Grass) {
+        if (type === TileType.Grass) {
             color = 0x339933;
         }
 
-        return new Tile(descriptor.x, descriptor.y, len, color);
+        return new Tile(descriptor.x, descriptor.y, len, descriptor.chunkId, color);
     }
 
 }

@@ -2,6 +2,7 @@ import {io, Socket} from "socket.io-client"
 import {Game} from "../Game";
 import {InitMessage} from "./InitMessage";
 import {GameDescriptor} from "../../map/discriptors/GameDescriptor";
+import {UpdateChunksMessage} from "./UpdateChunksMessage";
 
 export class ConnectionHandler {
 
@@ -35,6 +36,12 @@ export class ConnectionHandler {
                 console.log("initialize message:", initMessage);
                 this.game.loadMap(initMessage.chunks, initMessage.player);
             });
+
+            this.socket.on("update_chunks", (chunksData: UpdateChunksMessage) => {
+                console.log("update chunks message. load: ", chunksData.loadChunks.length, ", unload: ", chunksData.unloadIds.length);
+                this.game.unload(chunksData.unloadIds);
+                this.game.update(chunksData.loadChunks);
+            })
 
             this.socket.on("disconnect_player", (id) => {
                 this.game.processDisconnect(id);

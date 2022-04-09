@@ -6,6 +6,8 @@ export class Tile {
 
     private graph: Graphics = new Graphics();
 
+    private chunkId: number;
+
     private x: number;
 
     private y: number;
@@ -14,10 +16,11 @@ export class Tile {
 
     private parent: Container;
 
-    constructor(x: number, y: number, len: number, color?: number) {
+    constructor(x: number, y: number, len: number, chunkId:number, color?: number) {
         this.x = x;
         this.y = y;
         this.len = len;
+        this.chunkId = chunkId;
 
         let fColor = color === undefined ? Tile.defaultColor : color;
 
@@ -28,6 +31,10 @@ export class Tile {
     public attach(parent: Container) {
         this.parent = parent;
         parent.addChild(this.graph);
+    }
+
+    public unAttach() {
+        this.parent.removeChild(this.graph);
     }
 
     public getParent(): Container {

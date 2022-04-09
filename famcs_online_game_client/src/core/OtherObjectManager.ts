@@ -16,7 +16,7 @@ export class OtherObjectManager {
     private idToPlayerObject: Map<number, OtherPlayerObject> = new Map<number, OtherPlayerObject>()
 
     public constructor() {
-
+        this.container.zIndex = 90;
     }
 
     public apply(pDescriptor: PlayerDescriptor) {

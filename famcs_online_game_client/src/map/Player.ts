@@ -22,6 +22,7 @@ export class Player {
     }
 
     public attach(container: Container) {
+        this.sprite.zIndex = 100;
         container.addChild(this.sprite);
     }
 

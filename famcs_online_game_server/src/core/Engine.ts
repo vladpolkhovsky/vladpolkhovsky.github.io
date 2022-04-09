@@ -81,6 +81,7 @@ export class Engine {
         setTimeout(() => this.gameLoopIteration(), Engine.TickRate);
     }
 
+    private chunkLoadIteration: number = 0;
 
     private makeUpdateRenounce(): PlayerDescriptor[] {
 
@@ -91,15 +92,28 @@ export class Engine {
         let pd: Array<PlayerDescriptor> = new Array<PlayerDescriptor>(this.idToPlayerState.size);
 
         let index = 0;
-        this.idToPlayerState.forEach((value, key) => {
+
+        let chunkLoadIteration = this.chunkLoadIteration;
+
+        this.idToPlayerState.forEach(value => {
             pd[index] = {
                 id: value.id,
                 x: value.playerPosition.x,
                 y: value.playerPosition.y,
                 objectType: "player"
             } as PlayerDescriptor;
+            if (chunkLoadIteration == 0) {
+                let location = this.mapService.getLocation(pd[index]);
+                this.socketService.getSocket(value.id).emit("update_chunks", location);
+            }
             index++;
-        });
+
+        })
+
+        this.chunkLoadIteration += 1;
+        if (this.chunkLoadIteration > 15) {
+            this.chunkLoadIteration = 0;
+        }
 
         return pd;
     }

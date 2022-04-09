@@ -6,6 +6,7 @@ export interface TileDescriptor extends GameDescriptor, PositionDescriptor {
 
     len?: number,
     type: string,
+    chunkId: number,
     additionalType?: string,
 
     contains?: GameDescriptor

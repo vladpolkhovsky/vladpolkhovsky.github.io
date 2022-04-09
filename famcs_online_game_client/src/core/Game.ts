@@ -60,6 +60,18 @@ export class Game {
         this.keyController = new KeyController(this.app, this.connectionHandler);
     }
 
+    public unload(ids: number[]) {
+        console.log("UNLOAD! count:", ids.length)
+        ids.forEach(value => {
+            this.level.clearChunk(value);
+        });
+    }
+
+    public update(chunks: ChunkDescriptor[]) {
+        console.log("loaded count:", chunks.length);
+        this.level.loadMapFromTileDescriptorArray(this.toTiles(chunks));
+    }
+
     public updateState(pd: GameDescriptor[]) {
         pd.forEach(descriptor => {
             if (descriptor.objectType === "player") {

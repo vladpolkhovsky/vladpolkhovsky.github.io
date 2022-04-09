@@ -9,10 +9,10 @@ export class Level {
 
     private tileContainer: Container = new Container();
 
-    private tiles: Tile[] = [];
+    private chunkIdToTileMap: Map<number, Tile[]> = new Map<number, Tile[]>();
 
     private constructor() {
-
+        this.container.sortableChildren = true;
     }
 
     public static builder(): Level {
@@ -25,13 +25,19 @@ export class Level {
 
     public loadMapFromTileDescriptorArray(map: TileDescriptor[][]): Level {
 
-        console.log("get message");
+        console.log("load map");
 
         map.forEach(row => {
             row.forEach(td => {
                 let cTile: Tile = TileBuilder.buildTile(td);
                 cTile.attach(this.tileContainer)
-                this.tiles.push(cTile);
+
+                let tiles = this.chunkIdToTileMap.get(td.chunkId);
+                if (tiles == undefined) {
+                    tiles = this.chunkIdToTileMap.set(td.chunkId, []).get(td.chunkId);
+                }
+
+                tiles.push(cTile);
             });
         });
 
@@ -40,13 +46,27 @@ export class Level {
         return this;
     }
 
+    public clearChunk(chunkId: number) {
+        let tiles = this.chunkIdToTileMap.get(chunkId);
+        tiles.forEach(value => {
+            value.unAttach();
+        });
+        this.chunkIdToTileMap.delete(chunkId);
+    }
+
     public attach(parent: Container) {
         parent.addChild(this.container);
     }
 
     public clear() {
+        this.chunkIdToTileMap.forEach(value => {
+            value.forEach(value1 => {
+                value1.unAttach();
+            });
+        });
         this.container.setTransform(0, 0);
+
+        this.chunkIdToTileMap.clear();
         this.container.removeChildren();
-        this.tiles = [];
     }
 }

@@ -4,6 +4,8 @@ import * as Buffer from "buffer";
 import {TileType} from "../../../famcs_online_game_client/src/map/TileType";
 import {PositionDescriptor} from "../../../famcs_online_game_client/src/map/discriptors/PositionDescriptor";
 import {ChunkDescriptor} from "../../../famcs_online_game_client/src/map/discriptors/ChunkDescriptor";
+import {UpdateChunksMessage} from "../../../famcs_online_game_client/src/core/network/UpdateChunksMessage";
+import {PlayerDescriptor} from "../../../famcs_online_game_client/src/map/discriptors/PlayerDescriptor";
 
 interface MapShort {
     map: string[][]
@@ -17,11 +19,15 @@ export class MapService {
 
     private readonly chunks: ChunkDescriptor[];
 
+    private readonly loadedChunksByPositionDescriptor: Map<number, ChunkDescriptor[]> = new Map<number, ChunkDescriptor[]>();
+
     private shortMap: MapShort;
 
-    private chunkSize: number = 10;
+    private chunkSize: number = 2;
 
     private tileLength: number = 50;
+
+    private loadDistance: number = 1200;
 
     public constructor() {
         let buffer: Buffer = fs.readFileSync(MapService.shortMapLocation);
@@ -68,8 +74,57 @@ export class MapService {
         } as TileDescriptor;
     }
 
-    public getLocation(positionDescriptor: PositionDescriptor): ChunkDescriptor[] {
-        return this.chunks;
+    public getLocation(playerDescriptor: PlayerDescriptor): UpdateChunksMessage {
+
+        console.log("Update chunks for ", playerDescriptor, " : ", playerDescriptor.id);
+
+        let chunkDescriptors = this.loadedChunksByPositionDescriptor.get(playerDescriptor.id);
+
+        let toUnloadIds = new Array<number>();
+
+        let toLoadChunks = new Array<ChunkDescriptor>();
+
+        let alreadyLoaded: Set<number> = new Set<number>();
+
+        let loadDist = this.loadDistance * this.loadDistance;
+
+        if (chunkDescriptors !== undefined) {
+            let newChunkDescr = new Array<ChunkDescriptor>();
+            chunkDescriptors.forEach(value => {
+                let chunkX = value.x + this.chunkSize * this.tileLength / 2 - playerDescriptor.x;
+                let chunkY = value.y + this.chunkSize * this.tileLength / 2 - playerDescriptor.y;
+                if (chunkX * chunkX + chunkY * chunkY > loadDist && !alreadyLoaded.has(value.id)) {
+                    toUnloadIds.push(value.id);
+                } else {
+                    alreadyLoaded.add(value.id);
+                    newChunkDescr.push(value);
+                }
+            });
+            chunkDescriptors = newChunkDescr;
+        } else {
+            chunkDescriptors = this.loadedChunksByPositionDescriptor.set(playerDescriptor.id, []).get(playerDescriptor.id);
+        }
+
+        this.chunks.forEach(value => {
+            let chunkX = value.x + this.chunkSize * this.tileLength / 2 - playerDescriptor.x;
+            let chunkY = value.y + this.chunkSize * this.tileLength / 2 - playerDescriptor.y;
+            let loadDist = this.loadDistance * this.loadDistance;
+            if (chunkX * chunkX + chunkY * chunkY < loadDist && !alreadyLoaded.has(value.id)) {
+                toLoadChunks.push(value);
+                chunkDescriptors.push(value);
+            }
+        });
+
+        this.loadedChunksByPositionDescriptor.set(playerDescriptor.id, chunkDescriptors);
+
+        console.log("to load = " + toLoadChunks.length);
+
+        console.log("to unload = " + toUnloadIds.length);
+
+        return {
+            loadChunks: toLoadChunks,
+            unloadIds: toUnloadIds
+        } as UpdateChunksMessage;
     }
 
     private makeChunks(t: TileDescriptor[][]): ChunkDescriptor[] {
@@ -87,6 +142,7 @@ export class MapService {
                 cid++;
                 for (let i = this.chunkSize * chunkX; i < Math.min(this.chunkSize * (chunkX + 1), t[0].length); i++) {
                     for (let j = this.chunkSize * chunkY; j < Math.min(this.chunkSize * (chunkY + 1), t.length); j++) {
+                        t[j][i].chunkId = ccd.id;
                         ccd.td.push(t[j][i]);
                     }
                 }
