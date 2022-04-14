@@ -2,7 +2,6 @@ import {TileDescriptor} from "../../../famcs_online_game_client/src/map/discript
 import * as fs from "fs"
 import * as Buffer from "buffer";
 import {TileType} from "../../../famcs_online_game_client/src/map/TileType";
-import {PositionDescriptor} from "../../../famcs_online_game_client/src/map/discriptors/PositionDescriptor";
 import {ChunkDescriptor} from "../../../famcs_online_game_client/src/map/discriptors/ChunkDescriptor";
 import {UpdateChunksMessage} from "../../../famcs_online_game_client/src/core/network/UpdateChunksMessage";
 import {PlayerDescriptor} from "../../../famcs_online_game_client/src/map/discriptors/PlayerDescriptor";
@@ -23,7 +22,7 @@ export class MapService {
 
     private shortMap: MapShort;
 
-    private chunkSize: number = 2;
+    private chunkSize: number = 8;
 
     private tileLength: number = 50;
 
@@ -105,6 +104,7 @@ export class MapService {
             chunkDescriptors = this.loadedChunksByPositionDescriptor.set(playerDescriptor.id, []).get(playerDescriptor.id);
         }
 
+        // TODO Генерация карты....
         this.chunks.forEach(value => {
             let chunkX = value.x + this.chunkSize * this.tileLength / 2 - playerDescriptor.x;
             let chunkY = value.y + this.chunkSize * this.tileLength / 2 - playerDescriptor.y;

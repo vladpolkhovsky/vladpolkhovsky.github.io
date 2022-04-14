@@ -9,6 +9,7 @@ import {KeyController} from "../controllers/KeyController";
 import {GameDescriptor} from "../map/discriptors/GameDescriptor";
 import {OtherObjectManager} from "./OtherObjectManager";
 import {ChunkDescriptor} from "../map/discriptors/ChunkDescriptor";
+import {BulletDescriptor} from "../map/discriptors/BulletDescriptor";
 
 export class Game {
 
@@ -61,14 +62,14 @@ export class Game {
     }
 
     public unload(ids: number[]) {
-        console.log("UNLOAD! count:", ids.length)
+        //console.log("UNLOAD! count:", ids.length)
         ids.forEach(value => {
             this.level.clearChunk(value);
         });
     }
 
     public update(chunks: ChunkDescriptor[]) {
-        console.log("loaded count:", chunks.length);
+        //console.log("loaded count:", chunks.length);
         this.level.loadMapFromTileDescriptorArray(this.toTiles(chunks));
     }
 
@@ -77,11 +78,17 @@ export class Game {
             if (descriptor.objectType === "player") {
                 let pDescriptor = <PlayerDescriptor>descriptor;
                 if (pDescriptor.id === this.player.getDescriptor().id) {
+                    let lastPLayerDescriptor = <PlayerDescriptor>this.player.getDescriptor();
                     this.player.applyDescriptor(pDescriptor);
+                    this.viewController.followPlayer(lastPLayerDescriptor, pDescriptor);
                 } else {
                     console.log("new player");
-                    this.otherObjectManager.apply(pDescriptor);
+                    this.otherObjectManager.applyPlayer(pDescriptor);
                 }
+            }
+            if (descriptor.objectType === "bullet") {
+                let bDescriptor = <BulletDescriptor>descriptor;
+                this.otherObjectManager.applyBullet(bDescriptor);
             }
         })
     }
