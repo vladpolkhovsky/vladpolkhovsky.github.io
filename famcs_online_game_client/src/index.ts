@@ -7,3 +7,5 @@ export function init() {
     }
     let game: Game = new Game(document.body, connection_url);
 }
+
+console.log("Hosted on heroku")
