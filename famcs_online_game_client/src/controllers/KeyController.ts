@@ -18,6 +18,7 @@ export class KeyController {
 
         canvas.addEventListener("keydown", (ev) => {
             if (KeyController.controlKeys.lastIndexOf(ev.key.toLocaleLowerCase()) != -1) {
+                console.log("MOVE");
                 this.connectionHandler.getSocket().emit("keydown", ev.key);
             }
         });

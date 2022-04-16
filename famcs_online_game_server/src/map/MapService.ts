@@ -5,6 +5,7 @@ import {TileType} from "../../../famcs_online_game_client/src/map/TileType";
 import {ChunkDescriptor} from "../../../famcs_online_game_client/src/map/discriptors/ChunkDescriptor";
 import {UpdateChunksMessage} from "../../../famcs_online_game_client/src/core/network/UpdateChunksMessage";
 import {PlayerDescriptor} from "../../../famcs_online_game_client/src/map/discriptors/PlayerDescriptor";
+import {BorderDescriptor} from "../../../famcs_online_game_client/src/map/discriptors/BorderDescriptor";
 
 interface MapShort {
     map: string[][]
@@ -28,10 +29,29 @@ export class MapService {
 
     private loadDistance: number = 1200;
 
+    private readonly mapWidth: number;
+
+    private readonly mapHeight: number;
+
+    private mapRadius: number;
+
+    private readonly mapCenterX:number;
+
+    private readonly mapCenterY:number;
+
     public constructor() {
         let buffer: Buffer = fs.readFileSync(MapService.shortMapLocation);
         this.shortMap = JSON.parse(buffer.toString());
         this.tiles = this.loadMapShort(this.shortMap.map);
+
+        this.mapWidth = this.tiles[0].length * this.tileLength;
+        this.mapHeight = this.tiles.length * this.tileLength;
+
+        this.mapCenterX = this.mapWidth / 2;
+        this.mapCenterY = this.mapHeight / 2;
+
+        this.mapRadius = this.calcRadius();
+
         this.chunks = this.makeChunks(this.tiles);
         console.log("Map loaded from " + MapService.shortMapLocation + ', result tile count ' + this.tiles.length * this.tiles[0].length);
     }
@@ -127,6 +147,23 @@ export class MapService {
         } as UpdateChunksMessage;
     }
 
+    private t = 0;
+
+    public getBorder(): BorderDescriptor {
+        if (this.t >= 10) {
+            this.t = 0;
+            this.mapRadius -= 1;
+            this.mapRadius = Math.max(400, this.mapRadius);
+        }
+        this.t++;
+        return {
+            x: this.mapCenterX,
+            y: this.mapCenterY,
+            r: this.mapRadius,
+            objectType: "border"
+        } as BorderDescriptor;
+    }
+
     private makeChunks(t: TileDescriptor[][]): ChunkDescriptor[] {
         let cd: Array<ChunkDescriptor> = new Array<ChunkDescriptor>();
         let cid: number = 1;
@@ -152,5 +189,13 @@ export class MapService {
         }
         console.log("Map loaded total chunks " + chunksCount);
         return cd;
+    }
+
+    public resetBorder() {
+        this.mapRadius = this.calcRadius();
+    }
+
+    private calcRadius() {
+        return Math.sqrt(this.mapCenterX * this.mapCenterX + this.mapCenterY * this.mapCenterY);
     }
 }

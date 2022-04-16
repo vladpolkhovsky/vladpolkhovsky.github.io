@@ -7,6 +7,8 @@ import {PlayerDescriptor} from "../../../famcs_online_game_client/src/map/discri
 import {MovementProcessor} from "./MovementProcessor";
 import {PlayerState} from "./PlayerState";
 import {Socket} from "socket.io";
+import {GameDescriptor} from "../../../famcs_online_game_client/src/map/discriptors/GameDescriptor";
+import {BorderDescriptor} from "../../../famcs_online_game_client/src/map/discriptors/BorderDescriptor";
 
 export class Engine {
 
@@ -70,7 +72,7 @@ export class Engine {
     private gameLoopIteration(): void {
         let dt = this.updateTime();
 
-        this.movementProcessor.tick(dt);
+        this.movementProcessor.tick(dt, this.mapService.getBorder());
 
         if (this.itCount % 3 == 0) {
             this.connectionHandler.getServer()
@@ -83,13 +85,13 @@ export class Engine {
 
     private chunkLoadIteration: number = 0;
 
-    private makeUpdateRenounce(): PlayerDescriptor[] {
+    private makeUpdateRenounce(): GameDescriptor[] {
 
         this.movementProcessor.getPositions().forEach(value => {
             this.idToPlayerState.get(value[0]).playerPosition = value[1];
         })
 
-        let pd: Array<PlayerDescriptor> = new Array<PlayerDescriptor>(this.idToPlayerState.size);
+        let pd: Array<GameDescriptor> = new Array<GameDescriptor>(this.idToPlayerState.size);
 
         let index = 0;
 
@@ -103,12 +105,13 @@ export class Engine {
                 objectType: "player"
             } as PlayerDescriptor;
             if (chunkLoadIteration == 0) {
-                let location = this.mapService.getLocation(pd[index]);
+                let location = this.mapService.getLocation(<PlayerDescriptor>pd[index]);
                 this.socketService.getSocket(value.id).emit("update_chunks", location);
             }
             index++;
-
         })
+
+        pd.push(this.mapService.getBorder());
 
         this.chunkLoadIteration += 1;
         if (this.chunkLoadIteration > 15) {

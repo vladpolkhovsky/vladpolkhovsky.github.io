@@ -1,7 +1,7 @@
-import {Container, Sprite} from "pixi.js";
+import {Container, Graphics, Sprite, utils} from "pixi.js";
 import {PlayerDescriptor} from "../map/discriptors/PlayerDescriptor";
-import {GameDescriptor} from "../map/discriptors/GameDescriptor";
 import {BulletDescriptor} from "../map/discriptors/BulletDescriptor";
+import {BorderDescriptor} from "../map/discriptors/BorderDescriptor";
 
 interface OtherPlayerObject {
 
@@ -27,8 +27,11 @@ export class OtherObjectManager {
 
     private idToBulletObject: Map<number, BulletObject> = new Map<number, BulletObject>();
 
+    private border: Graphics = new Graphics();
+
     public constructor() {
         this.container.zIndex = 90;
+        this.container.addChild(this.border);
     }
 
     public applyPlayer(pDescriptor: PlayerDescriptor) {
@@ -73,10 +76,21 @@ export class OtherObjectManager {
         if (idToPlayerObject !== undefined) {
             this.container.removeChild(idToPlayerObject.sprite);
         }
-
         let idToBulletObject = this.idToBulletObject.get(id);
         if (idToBulletObject !== undefined) {
             this.container.removeChild(idToBulletObject.sprite);
         }
+    }
+
+    private t = 0;
+
+    public applyBorder(bDescriptor: BorderDescriptor) {
+        this.t += 0.01;
+        let b = Math.sin(this.t) * 0.3;
+        console.log(b);
+        this.border.clear();
+        this.border.lineStyle(10, utils.rgb2hex([1, b + 0.7, -b + 0.7]));
+        this.border.drawCircle(bDescriptor.x, bDescriptor.y, bDescriptor.r);
+        this.border.endFill();
     }
 }

@@ -1,11 +1,15 @@
 import {PositionDescriptor} from "../../../famcs_online_game_client/src/map/discriptors/PositionDescriptor";
 import {KeyPressed, KeyService} from "./KeyService";
+import {MapService} from "../map/MapService";
+import {BorderDescriptor} from "../../../famcs_online_game_client/src/map/discriptors/BorderDescriptor";
 
 export class MovementProcessor {
 
     private idToPosition: Map<number, PositionDescriptor> = new Map<number, PositionDescriptor>();
 
     private keyService: KeyService;
+
+    private mapService: MapService;
 
     private static DEFAULT_SPEED = 100;
 
@@ -16,8 +20,9 @@ export class MovementProcessor {
         ["d", 1, 0]
     ];
 
-    public constructor(keyService: KeyService) {
+    public constructor(keyService: KeyService, mapService: MapService) {
         this.keyService = keyService;
+        this.mapService = mapService;
     }
 
     public processConnection(id: number): PositionDescriptor {
@@ -34,13 +39,36 @@ export class MovementProcessor {
         return pd;
     }
 
-    public tick(dt: number): void {
+    private sqr(v: number): number {
+        return v * v;
+    }
+
+    private getLenFromCenter(pd: PositionDescriptor): number {
+        return Math.sqrt(this.sqr(pd.x - this.mapService.getBorder().x) + this.sqr(pd.y - this.mapService.getBorder().y));
+    }
+
+    public tick(dt: number, border: BorderDescriptor): void {
         this.idToPosition.forEach((positionDescriptor, id) => {
             let keyPressed = this.keyService.get(id);
             let vector: [number, number] = MovementProcessor.getMoveVector(keyPressed);
-            positionDescriptor.x = positionDescriptor.x + vector[0] * MovementProcessor.DEFAULT_SPEED * dt;
-            positionDescriptor.y = positionDescriptor.y + vector[1] * MovementProcessor.DEFAULT_SPEED * dt;
-            this.idToPosition.set(id, positionDescriptor);
+
+            let newPositionDescriptor: PositionDescriptor = {
+                x: positionDescriptor.x + vector[0] * MovementProcessor.DEFAULT_SPEED * dt,
+                y: positionDescriptor.y + vector[1] * MovementProcessor.DEFAULT_SPEED * dt
+            } as PositionDescriptor;
+
+
+            let vLen = this.getLenFromCenter(newPositionDescriptor);
+            if (vLen >= border.r) {
+                let x = newPositionDescriptor.x - border.x;
+                let y = newPositionDescriptor.y - border.y;
+                x /= vLen;
+                y /= vLen;
+                newPositionDescriptor.x = border.x + x * border.r;
+                newPositionDescriptor.y = border.y + y * border.r;
+            }
+
+            this.idToPosition.set(id, newPositionDescriptor);
         });
     }
 
@@ -68,7 +96,10 @@ export class MovementProcessor {
         return vector;
     }
 
-    public processDisconnect(socketId: number):void {
+    public processDisconnect(socketId: number): void {
         this.idToPosition.delete(socketId);
+        if (this.idToPosition.size === 0) {
+            this.mapService.resetBorder();
+        }
     }
 }

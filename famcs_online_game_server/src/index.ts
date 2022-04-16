@@ -11,7 +11,7 @@ let socketService: SocketService = new SocketService();
 
 let keyService: KeyService = new KeyService();
 
-let movementProcessor: MovementProcessor = new MovementProcessor(keyService);
+let movementProcessor: MovementProcessor = new MovementProcessor(keyService, mapService);
 
 let connectionHandler: ConnectionHandler = new ConnectionHandler(mapService, socketService, keyService, movementProcessor);
 

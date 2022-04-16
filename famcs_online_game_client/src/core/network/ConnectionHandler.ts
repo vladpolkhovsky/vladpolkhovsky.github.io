@@ -35,6 +35,7 @@ export class ConnectionHandler {
             this.socket.on("initialize", (initMessage: InitMessage) => {
                 console.log("initialize message:", initMessage);
                 this.game.loadMap(initMessage.chunks, initMessage.player);
+                this.game.updateState([initMessage.border]);
             });
 
             this.socket.on("update_chunks", (chunksData: UpdateChunksMessage) => {

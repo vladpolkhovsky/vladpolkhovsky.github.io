@@ -10,6 +10,7 @@ import {GameDescriptor} from "../map/discriptors/GameDescriptor";
 import {OtherObjectManager} from "./OtherObjectManager";
 import {ChunkDescriptor} from "../map/discriptors/ChunkDescriptor";
 import {BulletDescriptor} from "../map/discriptors/BulletDescriptor";
+import {BorderDescriptor} from "../map/discriptors/BorderDescriptor";
 
 export class Game {
 
@@ -89,6 +90,10 @@ export class Game {
             if (descriptor.objectType === "bullet") {
                 let bDescriptor = <BulletDescriptor>descriptor;
                 this.otherObjectManager.applyBullet(bDescriptor);
+            }
+            if (descriptor.objectType === "border") {
+                let bDescriptor = <BorderDescriptor>descriptor;
+                this.otherObjectManager.applyBorder(bDescriptor);
             }
         })
     }

@@ -80,7 +80,8 @@ export class ConnectionHandler {
 
         socket.emit("initialize", {
             player: playerDescriptor,
-            chunks: this.mapService.getLocation(playerDescriptor).loadChunks
+            chunks: this.mapService.getLocation(playerDescriptor).loadChunks,
+            border: this.mapService.getBorder()
         } as InitMessage);
     }
 
