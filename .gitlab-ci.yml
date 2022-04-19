@@ -1,3 +1,12 @@
-git remote add heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/$HEROKU_APP_PRODUCTION.git
+image: node:latest
 
-git push -f heroku HEAD:master
+stages:
+  - production
+
+production:
+  type: deploy
+  stage: production
+  script:
+    - dpl --provider=heroku --app=$HEROKU_APP_PRODUCTION --api-key=$HEROKU_API_KEY
+  only:
+    - master
