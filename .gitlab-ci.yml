@@ -2,7 +2,6 @@ stages:
   - production
 
 production:
-  type: deploy
   stage: production
   script:
     - gem install dpl
