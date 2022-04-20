@@ -25,6 +25,6 @@ jobs:
         run : gem install dpl
 
       - name: run dpl
-        run: echo $APP_NAME
+        run: echo ${{secrets.HEROKU_APP}}
 
       - run: dpl --provider=heroku --api_key=$API_KEY --app=$APP_NAME
