@@ -22,7 +22,9 @@ jobs:
 
       - name: run dpl
         env:
-          APP_NAME: ${{ secrets.HEROKU_APP }}
-          API_KEY: ${{ secrets.HEROKU_API_KEY }}
-        run : |
-          dpl --provider=heroku --api_key=$API_KEY --app=$APP_NAME
+          APP_NAME: ${{secrets.HEROKU_APP}}
+          API_KEY: ${{secrets.HEROKU_API_KEY}}
+
+      - run: echo "$APP_NAME"
+
+      - run: dpl --provider=heroku --api_key=$API_KEY --app=$APP_NAME
