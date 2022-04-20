@@ -27,4 +27,4 @@ jobs:
       - name: run dpl
         run: echo "${{ secrets.HEROKU_APP }}"
 
-      - run: dpl --provider=heroku --api_key=${{secrets.HEROKU_API_KEY}} --app=${{secrets.HEROKU_APP}}
+      - run: dpl --provider=heroku --api_key=${{ secrets.HEROKU_API_KEY }} --app=${{ secrets.HEROKU_APP }}
