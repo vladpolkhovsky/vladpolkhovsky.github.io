@@ -25,4 +25,4 @@ jobs:
           APP_NAME: ${{ secrets.HEROKU_APP }}
           API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run : |
-          dpl --provider=heroku --app=$APP_NAME --api-key=$API_KEY
+          dpl heroku api --api_key $API_KEY --strategy api --app $APP_NAME --cleanup --run cmd
