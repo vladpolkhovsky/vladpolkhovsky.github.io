@@ -25,4 +25,4 @@ jobs:
           APP_NAME: ${{ secrets.HEROKU_APP }}
           API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run : |
-          dpl heroku git --api_key=$API_KEY
+          dpl --provider=heroku --api_key=$API_KEY --app=$APP_NAME
