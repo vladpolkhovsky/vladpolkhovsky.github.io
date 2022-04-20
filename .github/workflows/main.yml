@@ -17,4 +17,4 @@ jobs:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: famcs-game-server
           heroku_email: vlad.polkhovsky@gmail.com
-          remote_branch: master
+          branch: master
