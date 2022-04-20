@@ -18,11 +18,11 @@ jobs:
           ruby-version: 2.6
 
       - name: dpl install
-        run : gem install dpl --pre
+        run : gem install dpl
 
       - name: run dpl
         env:
           APP_NAME: ${{ secrets.HEROKU_APP }}
           API_KEY: ${{ secrets.HEROKU_API_KEY }}
         run : |
-          dpl --provider=heroku --api_key=$API_KEY --app=$APP_NAME
+          dpl --provider=heroku git --api_key=$API_KEY --app=$APP_NAME
