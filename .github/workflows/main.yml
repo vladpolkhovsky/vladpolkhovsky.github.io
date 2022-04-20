@@ -3,7 +3,7 @@ name: Deploy to Heroku
 on:
   push:
     branches:
-      - main
+      - master
 
 env:
   APP_NAME: ${{ secrets.HEROKU_APP }}
@@ -24,6 +24,4 @@ jobs:
         run : gem install dpl
 
       - name: run dpl
-        run: echo "${{ secrets.HEROKU_APP }}"
-
       - run: dpl --provider=heroku --api-key=${{ secrets.HEROKU_API_KEY }} --app=${{ secrets.HEROKU_APP }}
