@@ -17,5 +17,9 @@ jobs:
           machine: git.heroku.com
           username: ${{ secrets.HEROKU_EMAIL }}
           password: ${{ secrets.HPASSWORD }}
-      - run: git remote set-url heroku https://git.heroku.com/famcs-game-server.git
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '14'
+      - run: npm install -g heroku
+      - run: heroku git:remote -a famcs-game-server
       - run: git push heroku main
