@@ -6,13 +6,16 @@ on:
       - master
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
+    environment:
+      name: Heroku
     steps:
       - uses: actions/checkout@v2
       - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "famcs-game-server" #Must be unique in Heroku
-          heroku_email: "vlad.polkhovsky@gmail.com"
-          branch: "master"
+          heroku_app_name: famcs-game-server #Must be unique in Heroku
+          heroku_email: vlad.polkhovsky@gmail.com
+          branch: master
+      - run: heroku auth:whoami
