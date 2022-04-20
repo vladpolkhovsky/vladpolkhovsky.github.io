@@ -16,7 +16,7 @@ jobs:
         with:
           machine: git.heroku.com
           username: ${{ secrets.HEROKU_EMAIL }}
-          password: ${{ secrets.HPASSWORD }}
+          password: ${{ secrets.HEROKU_API_KEY }}
       - uses: actions/setup-node@v3
         with:
           node-version: '14'
