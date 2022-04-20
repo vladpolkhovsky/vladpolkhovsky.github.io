@@ -12,11 +12,13 @@ jobs:
       name: Heroku
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Ruby 2.6
-        uses: actions/setup-ruby@v1
+
+      - uses: actions/setup-ruby@v1
         with:
           ruby-version: 2.6
+
       - name: dpl install
-      - run : gem install dpl
+        run : gem install dpl
+
       - name: run dpl
-      - run : dpl --provider=heroku --app=${{ secrets.HEROKU_APP }} --api-key=${{ secrets.HEROKU_API_KEY }}
+        run : dpl --provider=heroku --app=${{ secrets.HEROKU_APP }} --api-key=${{ secrets.HEROKU_API_KEY }}
