@@ -17,6 +17,11 @@ jobs:
           machine: git.heroku.com
           username: ${{ secrets.HEROKU_EMAIL }}
           password: ${{ secrets.HEROKU_API_KEY }}
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: famcs-game-server
+          heroku_email: vlad.polkhovsky@gmail.com
       - uses: actions/setup-node@v3
         with:
           node-version: '14'
