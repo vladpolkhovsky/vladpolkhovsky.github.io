@@ -10,9 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: CDNievas/heroku-action@v1.0 # This is the action
+      - uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
         with:
-          branch: master
-          heroku_email: "vlad.polkhovsky@gmail.com"
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "famcs-game-server"
+          heroku_app_name: "famcs-game-server" #Must be unique in Heroku
+          heroku_email: "vlad.polkhovsky@gmail.com"
