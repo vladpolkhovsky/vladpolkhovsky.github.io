@@ -12,9 +12,10 @@ jobs:
       name: Heroku
     steps:
       - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.12.12
+      - uses: extractions/netrc@v1
         with:
-          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: famcs-game-server
-          heroku_email: vlad.polkhovsky@gmail.com
-          branch: master
+          machine: git.heroku.com
+          username: ${{ secrets.HEROKU_EMAIL }}
+          password: ${{ secrets.HPASSWORD }}
+      - run: git remote set-url heroku https://git.heroku.com/famcs-game-server.git
+      - run: git push heroku main
