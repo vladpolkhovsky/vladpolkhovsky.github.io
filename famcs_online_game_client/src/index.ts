@@ -5,7 +5,7 @@ export function init() {
     if (document.domain === 'vladpolkhovsky.github.io') {
         connection_url = 'https://famcs-game-server.herokuapp.com/';
     }
-    let game: Game = new Game(document.body, connection_url);
+    let game: Game = new Game(document.getElementById("game-window"), connection_url);
 }
 
 console.log("Hosted on heroku !!!!! ")

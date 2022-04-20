@@ -8,6 +8,14 @@ canvas.view {
     z-index: 100;
 }
 
+.cover-container {
+    height: 100vh;
+}
+
+.flex-fill {
+    flex: 1 1 auto;
+}
+
 .center {
     display: flex;
     justify-content: center;
