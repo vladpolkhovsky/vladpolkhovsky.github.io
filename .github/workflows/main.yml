@@ -12,19 +12,13 @@ jobs:
       name: Heroku
     steps:
       - uses: actions/checkout@v2
-      - uses: extractions/netrc@v1
+      - name: Set up Ruby 2.6
+        uses: actions/setup-ruby@v1
         with:
-          machine: git.heroku.com
-          username: ${{ secrets.HEROKU_EMAIL }}
-          password: ${{ secrets.HEROKU_API_KEY }}
-      - uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: famcs-game-server
-          heroku_email: vlad.polkhovsky@gmail.com
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '14'
-      - run: npm install -g heroku
-      - run: heroku git:remote -a famcs-game-server
-      - run: git push heroku main
+          ruby-version: 2.6
+
+      - name: dpl install
+      - run : gem install dpl
+
+      - name: run dpl
+      - run : dpl --provider=heroku --app=${{ secrets.HEROKU_APP }} --api-key=${{ secrets.HEROKU_API_KEY }}
