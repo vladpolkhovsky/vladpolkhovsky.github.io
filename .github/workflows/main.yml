@@ -5,6 +5,10 @@ on:
     branches:
       - main
 
+env:
+  APP_NAME: ${{secrets.HEROKU_APP}}
+  API_KEY: ${{secrets.HEROKU_API_KEY}}
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -21,9 +25,6 @@ jobs:
         run : gem install dpl
 
       - name: run dpl
-        env:
-          APP_NAME: ${{secrets.HEROKU_APP}}
-          API_KEY: ${{secrets.HEROKU_API_KEY}}
         run: echo $APP_NAME
 
       - run: dpl --provider=heroku --api_key=$API_KEY --app=$APP_NAME
