@@ -17,5 +17,5 @@ jobs:
           machine: git.heroku.com
           username: ${{ secrets.HEROKU_EMAIL }}
           password: ${{ secrets.HPASSWORD }}
-      - run: git remote set-url origin https://git.heroku.com/famcs-game-server.git
+      - run: git remote set-url heroku https://git.heroku.com/famcs-game-server.git
       - run: git push heroku main
