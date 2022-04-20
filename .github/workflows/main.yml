@@ -12,6 +12,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: CDNievas/heroku-action@v1.0 # This is the action
         with:
+          branch: master
           heroku_email: "vlad.polkhovsky@gmail.com"
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
           heroku_app_name: "famcs-game-server"
