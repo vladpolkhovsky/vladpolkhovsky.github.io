@@ -196,6 +196,6 @@ export class MapService {
     }
 
     private calcRadius() {
-        return Math.sqrt(this.mapCenterX * this.mapCenterX + this.mapCenterY * this.mapCenterY);
+        return 1200; //Math.sqrt(this.mapCenterX * this.mapCenterX + this.mapCenterY * this.mapCenterY);
     }
 }
