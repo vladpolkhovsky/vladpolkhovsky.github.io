@@ -62,8 +62,8 @@ export class MovementProcessor {
             let dy = vector[1] * MovementProcessor.DEFAULT_SPEED * dt;
 
             if (isTarget) {
-                dx *= 1.3;
-                dy *= 1.3;
+                dx *= 1.15;
+                dy *= 1.15;
             }
 
             let newPositionDescriptor: PositionDescriptor = {

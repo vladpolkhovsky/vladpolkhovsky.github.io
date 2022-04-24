@@ -152,8 +152,8 @@ export class MapService {
     public getBorder(): BorderDescriptor {
         if (this.t >= 10) {
             this.t = 0;
-            this.mapRadius -= 1;
-            this.mapRadius = Math.max(400, this.mapRadius);
+            this.mapRadius -= 0.01;
+            this.mapRadius = Math.max(600, this.mapRadius);
         }
         this.t++;
         return {
