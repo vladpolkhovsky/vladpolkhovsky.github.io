@@ -111,8 +111,16 @@ export class MapService {
             let chunkY = value.y + this.chunkSize * MapService.tileLength / 2 - playerDescriptor.y;
             let loadDist = this.loadDistance * this.loadDistance;
             if (chunkX * chunkX + chunkY * chunkY < loadDist) {
+                let found = false;
+                chunkDescriptors.forEach(chunk => {
+                    if (!found && chunk.id === value.id) {
+                        found = true;
+                    }
+                });
+                if (!found) {
+                    chunkDescriptors.push(value);
+                }
                 toLoadChunks.push(value);
-                chunkDescriptors.push(value);
             }
         });
 
