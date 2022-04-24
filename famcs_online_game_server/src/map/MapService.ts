@@ -19,7 +19,7 @@ export class MapService {
 
     private readonly chunks: ChunkDescriptor[];
 
-    private readonly loadedChunksByPositionDescriptor: Map<number, ChunkDescriptor[]> = new Map<number, ChunkDescriptor[]>();
+    private readonly loadedChunksByPositionDescriptor: Map<number, Set<number>> = new Map<number, Set<number>>();
 
     private shortMap: MapShort;
 
@@ -100,7 +100,7 @@ export class MapService {
         let chunkDescriptors = this.loadedChunksByPositionDescriptor.get(playerDescriptor.id);
 
         if (chunkDescriptors === undefined) {
-            chunkDescriptors = [];
+            chunkDescriptors = new Set<number>();
         }
 
         let toLoadChunks = new Array<ChunkDescriptor>();
@@ -112,21 +112,30 @@ export class MapService {
             let loadDist = this.loadDistance * this.loadDistance;
             if (chunkX * chunkX + chunkY * chunkY < loadDist) {
                 let found = false;
-                chunkDescriptors.forEach(chunk => {
-                    if (!found && chunk.id === value.id) {
-                        found = true;
-                    }
-                });
+                found = chunkDescriptors.has(value.id);
                 if (!found) {
-                    chunkDescriptors.push(value);
+                    chunkDescriptors.add(value.id);
                 }
-                toLoadChunks.push(value);
+                if (!found) {
+                    toLoadChunks.push(value);
+                } else {
+                    toLoadChunks.push({
+                        x: value.x,
+                        y: value.y,
+                        id: value.id,
+                        td: [],
+                        objectType: "chunk"
+                    } as ChunkDescriptor)
+                }
+            } else {
+                chunkDescriptors.delete(value.id);
             }
         });
 
         this.loadedChunksByPositionDescriptor.set(playerDescriptor.id, chunkDescriptors);
 
         console.log("to load = " + toLoadChunks.length);
+        console.log("descriptors  = " + this.loadedChunksByPositionDescriptor.get(playerDescriptor.id).size);
 
         return {
             loadChunks: toLoadChunks
