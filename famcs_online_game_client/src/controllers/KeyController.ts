@@ -10,23 +10,26 @@ export class KeyController {
         this.attachEvents(document.body);
     }
 
-    public static controlKeys: Array<String> = ["w", "a", "s", "d"];
+    public static controlKeys: Array<String> = ["wWцЦ", "aAфФ", "sSыЫ", "dDвВ"];
 
     private attachEvents(canvas: HTMLElement) {
 
         console.log("attach event");
 
         canvas.addEventListener("keydown", (ev) => {
-            if (KeyController.controlKeys.lastIndexOf(ev.key.toLocaleLowerCase()) != -1) {
-                console.log("MOVE");
-                this.connectionHandler.getSocket().emit("keydown", ev.key);
-            }
+            KeyController.controlKeys.forEach(value => {
+                if (value.indexOf(ev.key) != -1) {
+                    this.connectionHandler.getSocket().emit("keydown", value.charAt(0));
+                }
+            });
         });
 
         canvas.addEventListener("keyup", (ev) => {
-            if (KeyController.controlKeys.lastIndexOf(ev.key.toLocaleLowerCase()) != -1) {
-                this.connectionHandler.getSocket().emit("keyup", ev.key);
-            }
+            KeyController.controlKeys.forEach(value => {
+                if (value.indexOf(ev.key) != -1) {
+                    this.connectionHandler.getSocket().emit("keyup", value.charAt(0));
+                }
+            });
         });
 
     }
