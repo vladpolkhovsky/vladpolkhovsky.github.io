@@ -3,9 +3,9 @@ import {Container, Sprite} from "pixi.js";
 
 export class Player {
 
-    private sprite_common: Sprite = Sprite.from("../resources/player.png");
+    private sprite_common: Sprite = Sprite.from("../resources/player-self.png");
 
-    private sprite_target: Sprite = Sprite.from("../resources/player-target.png");
+    private sprite_target: Sprite = Sprite.from("../resources/player-self-target.png");
 
     private sprite: Sprite;
 
