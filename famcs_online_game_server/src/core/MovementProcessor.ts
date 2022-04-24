@@ -91,7 +91,7 @@ export class MovementProcessor {
                     }
                     if (this.sqr(value.playerPosition.x - positionDescriptor.x) + this.sqr(value.playerPosition.y - positionDescriptor.y) <= 32 * 32) {
                         idToPlayerState.get(id).type = "common";
-                        idToPlayerState.get(id).ignoreTicks = 100;
+                        idToPlayerState.get(id).ignoreTicks = 350;
                         idToPlayerState.get(value.id).type = "target";
                         changed = true;
                     }
