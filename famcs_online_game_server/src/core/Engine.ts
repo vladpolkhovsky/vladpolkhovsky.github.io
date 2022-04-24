@@ -14,7 +14,7 @@ export class Engine {
 
     private static TickRate = 6;
 
-    private idToPlayerState: Map<number, PlayerState> = new Map<number, PlayerState>();
+    public idToPlayerState: Map<number, PlayerState> = new Map<number, PlayerState>();
 
     private socketService: SocketService;
 
@@ -47,16 +47,22 @@ export class Engine {
 
     public processConnection(id: number, socket: Socket): void {
         let positionDescriptor = this.movementProcessor.processConnection(id);
+        let isThisFirstPlayer: boolean = false;
+        if (this.idToPlayerState.size === 0) {
+            isThisFirstPlayer = true;
+        }
         this.idToPlayerState.set(
             id,
             {
                 id: id,
+                type: isThisFirstPlayer ? "target" : "common",
                 playerPosition: positionDescriptor
             } as PlayerState
         );
         this.connectionHandler.initConnection(
             id,
             this.idToPlayerState.get(id).playerPosition,
+            this.idToPlayerState.get(id).type,
             socket
         );
     }
@@ -72,7 +78,7 @@ export class Engine {
     private gameLoopIteration(): void {
         let dt = this.updateTime();
 
-        this.movementProcessor.tick(dt, this.mapService.getBorder());
+        this.movementProcessor.tick(dt, this.idToPlayerState, this.mapService.getBorder());
 
         if (this.itCount % 3 == 0) {
             this.connectionHandler.getServer()
@@ -102,6 +108,7 @@ export class Engine {
                 id: value.id,
                 x: value.playerPosition.x,
                 y: value.playerPosition.y,
+                type: value.type,
                 objectType: "player"
             } as PlayerDescriptor;
             if (chunkLoadIteration == 0) {
@@ -122,8 +129,18 @@ export class Engine {
     }
 
     public processDisconnect(socketId: number):void {
+        let wasTarget = this.idToPlayerState.get(socketId).type === "target";
         this.movementProcessor.processDisconnect(socketId);
         this.keyService.processDisconnect(socketId);
         this.idToPlayerState.delete(socketId);
+        if (wasTarget) {
+            if (this.idToPlayerState.size != 0) {
+                let keys = this.idToPlayerState.keys();
+                let next = keys.next()
+                let playerState = this.idToPlayerState.get(next.value);
+                playerState.type = "target";
+                this.idToPlayerState.set(next.value, playerState);
+            }
+        }
     }
 }

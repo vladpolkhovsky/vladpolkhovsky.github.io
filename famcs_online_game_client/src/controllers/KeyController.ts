@@ -7,7 +7,7 @@ export class KeyController {
 
     public constructor(app: Application, connectionHandler: ConnectionHandler) {
         this.connectionHandler = connectionHandler;
-        this.attachEvents(app.view.parentElement);
+        this.attachEvents(document.body);
     }
 
     public static controlKeys: Array<String> = ["w", "a", "s", "d"];

@@ -3,33 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <title>Game</title>
-
     <link href="./css/style.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-
-    <script src="./js/bundle.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/particlesjs/2.2.2/particles.min.js"></script>
-    <script>
-        initBackground = function () {
-            Particles.init({
-                selector: '.background',
-                maxParticles: 200,
-                connectParticles: true
-            });
-        };
-    </script>
 </head>
-<body onload="FamcsGameLib.init(); initBackground();" style="max-height: 100vh !important;">
-<div class="container text-center">
-    <div class="container align-items-center justify-content-center mw-75 mh-75" >
-        <div class="row align-items-center justify-content-center">
-            <code><a href="https://github.com/vladpolkhovsky/vladpolkhovsky.github.io">Source code</a></code>
-        </div>
-        <div id="game-window" class="row mw-100 h-100 align-items-center justify-content-center">
-        </div>
+<body onload="FamcsGameLib.init(); initBackground();">
+<div class="container text-center mh-100 min-vh-100 align-items-center justify-content-center">
+    <div class="row">
+        <h3>
+            <small class="text-muted">Курсовая работа</small>
+            <br />
+            <br />
+            "ОРГАНИЗАЦИЯ МНОГОПОЛЬЗОВАТЕЛЬСКИХ КОМПЬЮТЕРНЫХ ИГР, ОСНОВАННЫХ НА УПРАВЛЕНИИ ПЕРСОНАЖАМИ"
+        </h3>
+        <h4>
+            <br />
+            <br />
+            <br />
+            <p>Для перемешения используйте <kbd>w, a, s, d</kbd></p>
+            <br/>
+            <samp>
+                <a href="./game.html" target="_blank">Подключиться</a>
+            </samp>
+            <br/>
+            <br/>
+            <samp>
+                <a href="https://github.com/vladpolkhovsky/vladpolkhovsky.github.io" target="_blank">Исходный код на
+                    GitHub</a>
+            </samp>
+            <br/>
+            <br/>
+        </h4>
     </div>
 </div>
-<canvas class="background" height="932" style="width: 100%; height: 100%;" width="1920"></canvas>
 </body>
 </html>

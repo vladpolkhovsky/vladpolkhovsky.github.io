@@ -70,11 +70,12 @@ export class ConnectionHandler {
         });
     }
 
-    public initConnection(socketId: number, positionDescriptor: PositionDescriptor, socket: Socket) {
+    public initConnection(socketId: number, positionDescriptor: PositionDescriptor, type:String, socket: Socket) {
 
         let playerDescriptor: PlayerDescriptor = {
             x: positionDescriptor.x,
             y: positionDescriptor.y,
+            type: type,
             id: socketId
         } as PlayerDescriptor;
 

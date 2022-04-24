@@ -30,11 +30,10 @@ export class Game {
 
     public constructor(parentElement: HTMLElement, connectionUrl: string) {
         this.app = new Application({
-            backgroundColor: 0x41729F
+            backgroundColor: 0x41729F,
+            width: document.body.clientWidth,
+            height: document.body.clientHeight
         });
-        this.app.view.classList.add();
-        this.app.view.style.width = "100%";
-        this.app.view.style.width = "100%";
         this.connectionHandler = new ConnectionHandler(connectionUrl, this);
         this.otherObjectManager = new OtherObjectManager();
         parentElement.appendChild(this.app.view);

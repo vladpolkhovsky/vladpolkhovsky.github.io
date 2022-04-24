@@ -4,6 +4,10 @@ export interface PlayerState {
 
     id: number,
 
+    type?: string,
+
+    ignoreTicks: number,
+
     playerPosition: PositionDescriptor
 
 }

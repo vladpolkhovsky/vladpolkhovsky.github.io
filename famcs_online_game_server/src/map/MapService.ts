@@ -25,9 +25,9 @@ export class MapService {
 
     private chunkSize: number = 8;
 
-    private tileLength: number = 50;
+    public static tileLength: number = 50;
 
-    private loadDistance: number = 1200;
+    private loadDistance: number = 2000;
 
     private readonly mapWidth: number;
 
@@ -44,8 +44,8 @@ export class MapService {
         this.shortMap = JSON.parse(buffer.toString());
         this.tiles = this.loadMapShort(this.shortMap.map);
 
-        this.mapWidth = this.tiles[0].length * this.tileLength;
-        this.mapHeight = this.tiles.length * this.tileLength;
+        this.mapWidth = this.tiles[0].length * MapService.tileLength;
+        this.mapHeight = this.tiles.length * MapService.tileLength;
 
         this.mapCenterX = this.mapWidth / 2;
         this.mapCenterY = this.mapHeight / 2;
@@ -66,8 +66,8 @@ export class MapService {
             tdMap.push([]);
             for (let j = 0; j < map[i].length; j++) {
                 tdMap[i].push(this.parseItem(
-                        j * this.tileLength,
-                        i * this.tileLength,
+                        j * MapService.tileLength,
+                        i * MapService.tileLength,
                         map[i][j]
                     )
                 );
@@ -110,8 +110,8 @@ export class MapService {
         if (chunkDescriptors !== undefined) {
             let newChunkDescr = new Array<ChunkDescriptor>();
             chunkDescriptors.forEach(value => {
-                let chunkX = value.x + this.chunkSize * this.tileLength / 2 - playerDescriptor.x;
-                let chunkY = value.y + this.chunkSize * this.tileLength / 2 - playerDescriptor.y;
+                let chunkX = value.x + this.chunkSize * MapService.tileLength / 2 - playerDescriptor.x;
+                let chunkY = value.y + this.chunkSize * MapService.tileLength / 2 - playerDescriptor.y;
                 if (chunkX * chunkX + chunkY * chunkY > loadDist && !alreadyLoaded.has(value.id)) {
                     toUnloadIds.push(value.id);
                 } else {
@@ -126,8 +126,8 @@ export class MapService {
 
         // TODO Генерация карты....
         this.chunks.forEach(value => {
-            let chunkX = value.x + this.chunkSize * this.tileLength / 2 - playerDescriptor.x;
-            let chunkY = value.y + this.chunkSize * this.tileLength / 2 - playerDescriptor.y;
+            let chunkX = value.x + this.chunkSize * MapService.tileLength / 2 - playerDescriptor.x;
+            let chunkY = value.y + this.chunkSize * MapService.tileLength / 2 - playerDescriptor.y;
             let loadDist = this.loadDistance * this.loadDistance;
             if (chunkX * chunkX + chunkY * chunkY < loadDist && !alreadyLoaded.has(value.id)) {
                 toLoadChunks.push(value);
@@ -171,8 +171,8 @@ export class MapService {
         for (let chunkX = 0; chunkX < t.length / this.chunkSize; chunkX++) {
             for (let chunkY = 0; chunkY < t[0].length / this.chunkSize; chunkY++) {
                 let ccd = {
-                    x: chunkX * this.chunkSize * this.tileLength,
-                    y: chunkY * this.chunkSize * this.tileLength,
+                    x: chunkX * this.chunkSize * MapService.tileLength,
+                    y: chunkY * this.chunkSize * MapService.tileLength,
                     id: cid,
                     td: []
                 } as ChunkDescriptor;
