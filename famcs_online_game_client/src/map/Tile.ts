@@ -6,7 +6,7 @@ export class Tile {
 
     private graph: Graphics = new Graphics();
 
-    private chunkId: number;
+    public chunkId: number;
 
     private x: number;
 

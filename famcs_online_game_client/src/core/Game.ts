@@ -62,11 +62,26 @@ export class Game {
         this.keyController = new KeyController(this.app, this.connectionHandler);
     }
 
-    public unload(ids: number[]) {
-        //console.log("UNLOAD! count:", ids.length)
-        ids.forEach(value => {
-            this.level.clearChunk(value);
+    public unload(ids: ChunkDescriptor[]) {
+
+        let loaded = new Set<number>();
+        this.level.getChunkIdToTileMap().forEach(value => {
+            value.forEach(vq => {
+                loaded.add(vq.chunkId);
+            });
         });
+
+        let newLoaded = new Set<number>();
+        ids.forEach(value => {
+           newLoaded.add(value.id);
+        });
+
+        loaded.forEach(value => {
+            if (!newLoaded.has(value)) {
+                this.level.clearChunk(value);
+            }
+        });
+
     }
 
     public update(chunks: ChunkDescriptor[]) {

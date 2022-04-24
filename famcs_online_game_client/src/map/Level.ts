@@ -15,6 +15,10 @@ export class Level {
         this.container.sortableChildren = true;
     }
 
+    public getChunkIdToTileMap(): Map<number, Tile[]> {
+        return this.chunkIdToTileMap;
+    };
+
     public static builder(): Level {
         return new Level();
     }
@@ -25,19 +29,28 @@ export class Level {
 
     public loadMapFromTileDescriptorArray(map: TileDescriptor[][]): Level {
 
-        console.log("load map");
+        console.log("load map", this.chunkIdToTileMap, map);
+
+        let loaded = new Set<number>();
+        this.chunkIdToTileMap.forEach(value => {
+           value.forEach(vq => {
+              loaded.add(vq.chunkId);
+           });
+        });
 
         map.forEach(row => {
             row.forEach(td => {
-                let cTile: Tile = TileBuilder.buildTile(td);
-                cTile.attach(this.tileContainer)
+                if (!loaded.has(td.chunkId)) {
+                    let cTile: Tile = TileBuilder.buildTile(td);
+                    cTile.attach(this.tileContainer)
 
-                let tiles = this.chunkIdToTileMap.get(td.chunkId);
-                if (tiles == undefined) {
-                    tiles = this.chunkIdToTileMap.set(td.chunkId, []).get(td.chunkId);
+                    let tiles = this.chunkIdToTileMap.get(td.chunkId);
+                    if (tiles === undefined) {
+                        tiles = this.chunkIdToTileMap.set(td.chunkId, []).get(td.chunkId);
+                    }
+
+                    tiles.push(cTile);
                 }
-
-                tiles.push(cTile);
             });
         });
 
@@ -48,9 +61,11 @@ export class Level {
 
     public clearChunk(chunkId: number) {
         let tiles = this.chunkIdToTileMap.get(chunkId);
-        tiles.forEach(value => {
-            value.unAttach();
-        });
+        if (tiles !== undefined) {
+            tiles.forEach(value => {
+                value.unAttach();
+            });
+        }
         this.chunkIdToTileMap.delete(chunkId);
     }
 
@@ -65,8 +80,9 @@ export class Level {
             });
         });
         this.container.setTransform(0, 0);
-
         this.chunkIdToTileMap.clear();
         this.container.removeChildren();
     }
+
+
 }

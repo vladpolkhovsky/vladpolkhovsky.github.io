@@ -39,9 +39,9 @@ export class ConnectionHandler {
             });
 
             this.socket.on("update_chunks", (chunksData: UpdateChunksMessage) => {
-                console.log("update chunks message. load: ", chunksData.loadChunks.length, ", unload: ", chunksData.unloadIds.length);
-                this.game.unload(chunksData.unloadIds);
+                console.log("update chunks message. load: ", chunksData.loadChunks.length);
                 this.game.update(chunksData.loadChunks);
+                this.game.unload(chunksData.loadChunks);
             })
 
             this.socket.on("disconnect_player", (id) => {

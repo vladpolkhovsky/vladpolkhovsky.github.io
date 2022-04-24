@@ -99,37 +99,18 @@ export class MapService {
 
         let chunkDescriptors = this.loadedChunksByPositionDescriptor.get(playerDescriptor.id);
 
-        let toUnloadIds = new Array<number>();
+        if (chunkDescriptors === undefined) {
+            chunkDescriptors = [];
+        }
 
         let toLoadChunks = new Array<ChunkDescriptor>();
-
-        let alreadyLoaded: Set<number> = new Set<number>();
-
-        let loadDist = this.loadDistance * this.loadDistance;
-
-        if (chunkDescriptors !== undefined) {
-            let newChunkDescr = new Array<ChunkDescriptor>();
-            chunkDescriptors.forEach(value => {
-                let chunkX = value.x + this.chunkSize * MapService.tileLength / 2 - playerDescriptor.x;
-                let chunkY = value.y + this.chunkSize * MapService.tileLength / 2 - playerDescriptor.y;
-                if (chunkX * chunkX + chunkY * chunkY > loadDist && !alreadyLoaded.has(value.id)) {
-                    toUnloadIds.push(value.id);
-                } else {
-                    alreadyLoaded.add(value.id);
-                    newChunkDescr.push(value);
-                }
-            });
-            chunkDescriptors = newChunkDescr;
-        } else {
-            chunkDescriptors = this.loadedChunksByPositionDescriptor.set(playerDescriptor.id, []).get(playerDescriptor.id);
-        }
 
         // TODO Генерация карты....
         this.chunks.forEach(value => {
             let chunkX = value.x + this.chunkSize * MapService.tileLength / 2 - playerDescriptor.x;
             let chunkY = value.y + this.chunkSize * MapService.tileLength / 2 - playerDescriptor.y;
             let loadDist = this.loadDistance * this.loadDistance;
-            if (chunkX * chunkX + chunkY * chunkY < loadDist && !alreadyLoaded.has(value.id)) {
+            if (chunkX * chunkX + chunkY * chunkY < loadDist) {
                 toLoadChunks.push(value);
                 chunkDescriptors.push(value);
             }
@@ -139,11 +120,8 @@ export class MapService {
 
         console.log("to load = " + toLoadChunks.length);
 
-        console.log("to unload = " + toUnloadIds.length);
-
         return {
-            loadChunks: toLoadChunks,
-            unloadIds: toUnloadIds
+            loadChunks: toLoadChunks
         } as UpdateChunksMessage;
     }
 
