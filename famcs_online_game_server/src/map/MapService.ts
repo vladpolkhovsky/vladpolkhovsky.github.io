@@ -95,7 +95,7 @@ export class MapService {
 
     public getLocation(playerDescriptor: PlayerDescriptor): UpdateChunksMessage {
 
-        console.log("Update chunks for ", playerDescriptor, " : ", playerDescriptor.id);
+        //console.log("Update chunks for ", playerDescriptor, " : ", playerDescriptor.id);
 
         let chunkDescriptors = this.loadedChunksByPositionDescriptor.get(playerDescriptor.id);
 
@@ -134,23 +134,17 @@ export class MapService {
 
         this.loadedChunksByPositionDescriptor.set(playerDescriptor.id, chunkDescriptors);
 
-        console.log("to load = " + toLoadChunks.length);
-        console.log("descriptors  = " + this.loadedChunksByPositionDescriptor.get(playerDescriptor.id).size);
+        //console.log("to load = " + toLoadChunks.length);
+        //console.log("descriptors  = " + this.loadedChunksByPositionDescriptor.get(playerDescriptor.id).size);
 
         return {
             loadChunks: toLoadChunks
         } as UpdateChunksMessage;
     }
 
-    private t = 0;
-
-    public getBorder(): BorderDescriptor {
-        if (this.t >= 10) {
-            this.t = 0;
-            this.mapRadius -= 0.01;
-            this.mapRadius = Math.max(600, this.mapRadius);
-        }
-        this.t++;
+    public getBorder(dt: number): BorderDescriptor {
+        this.mapRadius -= dt;
+        this.mapRadius = Math.max(600, this.mapRadius);
         return {
             x: this.mapCenterX,
             y: this.mapCenterY,

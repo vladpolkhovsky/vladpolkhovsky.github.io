@@ -3,11 +3,12 @@ import {KeyPressed, KeyService} from "./KeyService";
 import {MapService} from "../map/MapService";
 import {BorderDescriptor} from "../../../famcs_online_game_client/src/map/discriptors/BorderDescriptor";
 import {PlayerState} from "./PlayerState";
-import {isBoolean} from "util";
 
 export class MovementProcessor {
 
     private idToPosition: Map<number, PositionDescriptor> = new Map<number, PositionDescriptor>();
+
+    private idToBonus: Map<number, number> = new Map<number, number>();
 
     private keyService: KeyService;
 
@@ -45,11 +46,24 @@ export class MovementProcessor {
         return v * v;
     }
 
-    private getLenFromCenter(pd: PositionDescriptor): number {
-        return Math.sqrt(this.sqr(pd.x - this.mapService.getBorder().x) + this.sqr(pd.y - this.mapService.getBorder().y));
+    private getLenFromCenter(pd: PositionDescriptor, border: BorderDescriptor): number {
+        return Math.sqrt(this.sqr(pd.x - border.x) + this.sqr(pd.y - border.y));
     }
 
     public tick(dt: number, idToPlayerState: Map<number, PlayerState>, border: BorderDescriptor): void {
+
+        let toDelete: Array<number> = [];
+
+        this.idToBonus.forEach((value, key) => {
+            if (value < 0) {
+                toDelete.push(key);
+            }
+        });
+
+        toDelete.forEach((x) => {
+            this.idToBonus.delete(x)
+        });
+
         this.idToPosition.forEach((positionDescriptor, id) => {
             let keyPressed = this.keyService.get(id);
 
@@ -66,13 +80,19 @@ export class MovementProcessor {
                 dy *= 1.15;
             }
 
+            let bonus = this.idToBonus.get(id);
+            if (bonus !== undefined) {
+                dx *= 1.45
+                dy *= 1.45
+                this.idToBonus.set(id, bonus - dt);
+            }
+
             let newPositionDescriptor: PositionDescriptor = {
                 x: positionDescriptor.x + dx,
                 y: positionDescriptor.y + dy
             } as PositionDescriptor;
 
-
-            let vLen = this.getLenFromCenter(newPositionDescriptor);
+            let vLen = this.getLenFromCenter(newPositionDescriptor, border);
 
             if (vLen >= border.r) {
                 let x = newPositionDescriptor.x - border.x;
@@ -91,7 +111,7 @@ export class MovementProcessor {
                     }
                     if (this.sqr(value.playerPosition.x - positionDescriptor.x) + this.sqr(value.playerPosition.y - positionDescriptor.y) <= 32 * 32) {
                         idToPlayerState.get(id).type = "common";
-                        idToPlayerState.get(id).ignoreTicks = 350;
+                        idToPlayerState.get(id).ignoreTicks -= dt * 10;
                         idToPlayerState.get(value.id).type = "target";
                         changed = true;
                     }
@@ -131,5 +151,15 @@ export class MovementProcessor {
         if (this.idToPosition.size === 0) {
             this.mapService.resetBorder();
         }
+    }
+
+    private readonly BONUS_TIME = 5;
+
+    public addSpeedBonus(pkey: number) {
+        let speedBonus = this.idToBonus.get(pkey);
+        if (speedBonus === undefined || isNaN(speedBonus)) {
+            speedBonus = 0;
+        }
+        this.idToBonus.set(pkey, speedBonus * 0.7 + this.BONUS_TIME);
     }
 }

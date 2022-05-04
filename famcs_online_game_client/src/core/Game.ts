@@ -9,7 +9,7 @@ import {KeyController} from "../controllers/KeyController";
 import {GameDescriptor} from "../map/discriptors/GameDescriptor";
 import {OtherObjectManager} from "./OtherObjectManager";
 import {ChunkDescriptor} from "../map/discriptors/ChunkDescriptor";
-import {BulletDescriptor} from "../map/discriptors/BulletDescriptor";
+import {BoxDescriptor} from "../map/discriptors/BoxDescriptor";
 import {BorderDescriptor} from "../map/discriptors/BorderDescriptor";
 
 export class Game {
@@ -60,6 +60,7 @@ export class Game {
         this.otherObjectManager.attach(this.level.getContainer());
         this.viewController = new ViewController(this.app, this.level.getContainer());
         this.keyController = new KeyController(this.app, this.connectionHandler);
+        this.viewController.translateCamera(playerDescriptor);
     }
 
     public unload(ids: ChunkDescriptor[]) {
@@ -102,9 +103,13 @@ export class Game {
                     this.otherObjectManager.applyPlayer(pDescriptor);
                 }
             }
-            if (descriptor.objectType === "bullet") {
-                let bDescriptor = <BulletDescriptor>descriptor;
-                this.otherObjectManager.applyBullet(bDescriptor);
+            if (descriptor.objectType === "box") {
+                let bDescriptor = <BoxDescriptor>descriptor;
+                if (bDescriptor.id < 0) {
+                    this.otherObjectManager.remove(-bDescriptor.id);
+                } else {
+                    this.otherObjectManager.applyBox(bDescriptor);
+                }
             }
             if (descriptor.objectType === "border") {
                 let bDescriptor = <BorderDescriptor>descriptor;

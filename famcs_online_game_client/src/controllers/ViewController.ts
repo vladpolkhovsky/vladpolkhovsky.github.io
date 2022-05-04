@@ -101,12 +101,12 @@ export class ViewController {
         this.ddx *= (1 - this.smoothScale);
         this.ddy *= (1 - this.smoothScale);
 
-        if (Date.now() - this.lastEventTime > 5_000) {
+        if (Date.now() - this.lastEventTime > 2_000) {
             this.translateCamera(newDescriptor);
         }
     }
 
-    private translateCamera(newDescriptor: PlayerDescriptor) {
+    public translateCamera(newDescriptor: PlayerDescriptor) {
 
         let player = this.container.toLocal(
             this.container.toGlobal({

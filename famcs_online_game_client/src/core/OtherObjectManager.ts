@@ -1,6 +1,6 @@
 import {Container, Graphics, Sprite, utils} from "pixi.js";
 import {PlayerDescriptor} from "../map/discriptors/PlayerDescriptor";
-import {BulletDescriptor} from "../map/discriptors/BulletDescriptor";
+import {BoxDescriptor} from "../map/discriptors/BoxDescriptor";
 import {BorderDescriptor} from "../map/discriptors/BorderDescriptor";
 
 interface OtherPlayerObject {
@@ -15,9 +15,9 @@ interface OtherPlayerObject {
 
 }
 
-interface BulletObject {
+interface BoxObject {
 
-    bd: BulletDescriptor,
+    bd: BoxDescriptor,
 
     sprite: Sprite
 
@@ -29,7 +29,7 @@ export class OtherObjectManager {
 
     private idToPlayerObject: Map<number, OtherPlayerObject> = new Map<number, OtherPlayerObject>();
 
-    private idToBulletObject: Map<number, BulletObject> = new Map<number, BulletObject>();
+    private idToBulletObject: Map<number, BoxObject> = new Map<number, BoxObject>();
 
     private border: Graphics = new Graphics();
 
@@ -86,18 +86,17 @@ export class OtherObjectManager {
         otherPlayerObject.sprite.position.set(otherPlayerObject.pd.x, otherPlayerObject.pd.y);
     }
 
-    public applyBullet(bDescriptor: BulletDescriptor) {
-        let bulletObject: BulletObject = this.idToBulletObject.get(bDescriptor.id);
-        if (bulletObject === undefined) {
-            // TODO Исправить на спрайт пули.
-            let sprite: Sprite = Sprite.from("../resources/player.png");
+    public applyBox(bDescriptor: BoxDescriptor) {
+        let boxObject: BoxObject = this.idToBulletObject.get(bDescriptor.id);
+        if (boxObject === undefined) {
+            let sprite: Sprite = Sprite.from("../resources/box.png");
             sprite.anchor.set(0.5);
-            bulletObject = {
+            boxObject = {
                 bd: bDescriptor,
                 sprite: sprite
-            } as BulletObject;
-            bulletObject.sprite.position.set(bulletObject.bd.x, bulletObject.bd.y);
-            this.idToBulletObject.set(bDescriptor.id, bulletObject);
+            } as BoxObject;
+            boxObject.sprite.position.set(boxObject.bd.x, boxObject.bd.y);
+            this.idToBulletObject.set(bDescriptor.id, boxObject);
             this.container.addChild(sprite);
         }
     }
@@ -111,9 +110,9 @@ export class OtherObjectManager {
         if (idToPlayerObject !== undefined) {
             this.container.removeChild(idToPlayerObject.sprite);
         }
-        let idToBulletObject = this.idToBulletObject.get(id);
-        if (idToBulletObject !== undefined) {
-            this.container.removeChild(idToBulletObject.sprite);
+        let idToBoxObject = this.idToBulletObject.get(id);
+        if (idToBoxObject !== undefined) {
+            this.container.removeChild(idToBoxObject.sprite);
         }
     }
 

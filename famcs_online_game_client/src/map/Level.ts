@@ -29,7 +29,7 @@ export class Level {
 
     public loadMapFromTileDescriptorArray(map: TileDescriptor[][]): Level {
 
-        console.log("load map", this.chunkIdToTileMap, map);
+        //console.log("load map", this.chunkIdToTileMap, map);
 
         let loaded = new Set<number>();
         this.chunkIdToTileMap.forEach(value => {
@@ -83,6 +83,5 @@ export class Level {
         this.chunkIdToTileMap.clear();
         this.container.removeChildren();
     }
-
 
 }
