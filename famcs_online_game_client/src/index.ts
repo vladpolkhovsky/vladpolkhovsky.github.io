@@ -8,4 +8,4 @@ export function init() {
     let game: Game = new Game(document.getElementById("game-window"), connection_url);
 }
 
-console.log("Hosted on heroku !!!!! ")
+console.log("Hosted on heroku !!!!! !!! ")
