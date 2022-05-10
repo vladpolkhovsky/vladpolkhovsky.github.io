@@ -68,7 +68,7 @@ export class MovementProcessor {
             let keyPressed = this.keyService.get(id);
 
             let isTarget = idToPlayerState.get(id).type === "target";
-            idToPlayerState.get(id).ignoreTicks -= 2;
+            idToPlayerState.get(id).ignoreTicks -= dt;
 
             let vector: [number, number] = MovementProcessor.getMoveVector(keyPressed);
 
@@ -111,7 +111,7 @@ export class MovementProcessor {
                     }
                     if (this.sqr(value.playerPosition.x - positionDescriptor.x) + this.sqr(value.playerPosition.y - positionDescriptor.y) <= 32 * 32) {
                         idToPlayerState.get(id).type = "common";
-                        idToPlayerState.get(id).ignoreTicks -= dt * 10;
+                        idToPlayerState.get(id).ignoreTicks = 5;
                         idToPlayerState.get(value.id).type = "target";
                         changed = true;
                     }
